@@ -3,7 +3,7 @@ mod char_indexing;
 pub mod patterns;
 
 use self::patterns::*;
-use crate::frequency_lists::DictionaryType;
+use crate::frequency_lists::{DictionaryType, RankedDictionary};
 use char_indexing::{CharIndexable, CharIndexableStr};
 use fancy_regex::Regex as FancyRegex;
 use itertools::Itertools;
@@ -107,12 +107,12 @@ impl Matcher for DictionaryMatch {
         let do_trials = move |matches: &mut Vec<Match>,
                               password: &str,
                               dictionary_name: DictionaryType,
-                              ranked_dict: &HashMap<&str, usize>| {
+                              ranked_dict: &RankedDictionary| {
             let len = password.chars().count();
             for i in 0..len {
                 for j in i..len {
                     let word = password_lower.char_index(i..j + 1);
-                    if let Some(rank) = ranked_dict.get(word).cloned() {
+                    if let Some(rank) = ranked_dict.get(word) {
                         let pattern = MatchPattern::Dictionary(DictionaryPattern {
                             matched_word: word.to_string(),
                             rank,
