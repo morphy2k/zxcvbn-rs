@@ -44,6 +44,9 @@ fn main() -> io::Result<()> {
         add_dictionary(&mut file, name, path)
     })?;
 
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=data/");
+
     Ok(())
 }
 
